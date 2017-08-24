@@ -1,6 +1,6 @@
 {
   "name": "immutable-merge-patch",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "An implementation of RFC 7396 for Immutable Maps",
   "main": "index.js",
   "scripts": {
