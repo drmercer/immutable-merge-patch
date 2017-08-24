@@ -3,12 +3,16 @@ var Map = Immutable.Map;
 var OrderedMap = Immutable.OrderedMap;
 var is = Immutable.is;
 
-// TODO: eventually replace these with Immutable.isImmutable and .isOrdered -
-// see https://github.com/facebook/immutable-js/issues/1165#issuecomment-292650855
+// TODO: eventually replace these with Immutable.isImmutable, .isOrdered, and
+// Map.isMap - see https://github.com/facebook/immutable-js/issues/1165#issuecomment-292650855
 var isImmutable = maybeImmutable => Immutable.Iterable.isIterable(maybeImmutable);
 var isOrdered = maybeOrdered => maybeOrdered instanceof OrderedMap;
+var isMap = maybeMap => maybeMap instanceof Map;
 
 var deepEqual = require("deep-equal");
+
+//======================================================================
+//			generate (diff)
 
 function generate(before, after) {
 	var ordered = before instanceof OrderedMap;
@@ -51,14 +55,34 @@ function generate(before, after) {
 	});
 }
 
-module.exports = {
-	generate: generate,
-}
-
 function deepEquals(a, b) {
 	if (isImmutable(a)) {
 		return !isImmutable(b) || is(a, b);
 	} else {
 		return isImmutable(b) || deepEqual(a, b, {strict: true});
 	}
+}
+
+//======================================================================
+//			apply (patch)
+
+function apply(before, patch) {
+	var keysToDelete = [];
+	return before.withMutations(function(mutable) {
+		patch.forEach(function(val, key) {
+			var oldVal = mutable.get(key);
+			if (val === null) {
+				mutable.delete(key);
+			} else if (isMap(val) && isMap(oldVal)) {
+				mutable.set(key, apply(oldVal, val));
+			} else {
+				mutable.set(key, val);
+			}
+		});
+	});
+}
+
+module.exports = {
+	generate: generate,
+	apply: apply,
 }
