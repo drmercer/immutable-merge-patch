@@ -1,6 +1,7 @@
 var assert = require("assert");
 var Immutable = require("immutable");
 var Map = Immutable.Map;
+var OrderedMap = Immutable.OrderedMap;
 var List = Immutable.List;
 
 // immutable-merge-patch
@@ -25,6 +26,34 @@ describe("generate", () => {
 			diff.toObject(),
 			{
 				b: 5,
+			}
+		);
+		var otherWay = imp.generate(b, a);
+		assert.deepEqual(
+			otherWay.toObject(),
+			{
+				b: 2,
+			}
+		);
+	});
+
+	it("should properly detect a primitive replaced by an object", () => {
+		var a = Map({
+			a: 1,
+			b: 2,
+			c: 3
+		});
+		var b = Map({
+			a: 1,
+			b: { q: "potato" },
+			c: 3
+		});
+
+		var diff = imp.generate(a, b);
+		assert.deepEqual(
+			diff.toObject(),
+			{
+				b: { q: "potato" },
 			}
 		);
 		var otherWay = imp.generate(b, a);
@@ -96,6 +125,23 @@ describe("generate", () => {
 		assert.deepEqual(parentDiff.toJS(), {
 			child: childDiff.toJS()
 		});
+	});
+
+	it("should return an ordered map upon ordered input maps", () => {
+		var a = OrderedMap({
+			a: 1,
+			b: 2,
+			c: 3
+		});
+		var b = OrderedMap({
+			a: 1,
+			b: 5,
+			c: "potato"
+		});
+
+		var diff = imp.generate(a, b);
+
+		assert(diff instanceof OrderedMap);
 	});
 
 	describe("non-Map object values", () => {
