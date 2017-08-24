@@ -5,9 +5,15 @@ var is = Immutable.is;
 
 // TODO: eventually replace these with Immutable.isImmutable, .isOrdered, and
 // Map.isMap - see https://github.com/facebook/immutable-js/issues/1165#issuecomment-292650855
-var isImmutable = maybeImmutable => Immutable.Iterable.isIterable(maybeImmutable);
-var isOrdered = maybeOrdered => maybeOrdered instanceof OrderedMap;
-var isMap = maybeMap => maybeMap instanceof Map;
+var isImmutable = function(maybeImmutable) {
+	return Immutable.Iterable.isIterable(maybeImmutable);
+};
+var isOrdered = function(maybeOrdered) {
+	return maybeOrdered instanceof OrderedMap;
+};
+var isMap = function(maybeMap) {
+	return maybeMap instanceof Map
+};
 
 var deepEqual = require("deep-equal");
 
@@ -15,7 +21,7 @@ var deepEqual = require("deep-equal");
 //			generate (diff)
 
 function generate(before, after) {
-	var ordered = before instanceof OrderedMap;
+	var ordered = isOrdered(before);
 	var diff = ordered ? new OrderedMap() : new Map();
 
 	return diff.withMutations(function (mutableDiff) {
