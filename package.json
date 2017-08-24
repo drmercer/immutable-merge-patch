@@ -4,7 +4,8 @@
   "description": "An implementation of RFC 7396 for Immutable Maps",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/drmercer/immutable-merge-patch#readme",
   "devDependencies": {
+    "istanbul": "^0.4.5",
     "mocha": "^3.5.0"
   },
   "dependencies": {

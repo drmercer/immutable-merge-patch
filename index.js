@@ -55,9 +55,12 @@ function generate(before, after) {
 			});
 		});
 
-		// Record any additions (the remaining entries in remainingAfter)
-		// (we call toObject to make sure all the keys are strings)
-		mutableDiff.merge(new Map(remainingAfter.toObject()));
+		// Record any additions (the remaining entries in remainingAfter).
+		// (First make sure all the keys in remainingAfter are strings)
+		remainingAfter = remainingAfter.filter(function(__val, key) {
+			return typeof key === "string";
+		});
+		mutableDiff.merge(remainingAfter);
 	});
 }
 

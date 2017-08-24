@@ -37,6 +37,17 @@ describe("generate", () => {
 		);
 	});
 
+	it("should properly ignore non-string keys", () => {
+		var a = Map().set(["an","array"], "value");
+		var b = Map();
+
+		var d = imp.generate(a, b);
+		assert.deepEqual(d, Map());
+
+		var d2 = imp.generate(b, a);
+		assert.deepEqual(d2, Map());
+	});
+
 	it("should properly detect a primitive replaced by an object", () => {
 		var a = Map({
 			a: 1,
@@ -125,6 +136,24 @@ describe("generate", () => {
 		assert.deepEqual(parentDiff.toJS(), {
 			child: childDiff.toJS()
 		});
+	});
+
+	it("should properly diff empty child Maps", () => {
+		var a = Map({
+			child: Map(),
+			q: 1,
+		});
+		var b = Map({
+			child: Map(),
+			r: 2,
+		});
+
+		var diff = imp.generate(a, b);
+
+		assert.deepEqual(diff, Map({
+			q: null,
+			r: 2,
+		}));
 	});
 
 	it("should return an ordered map upon ordered input maps", () => {
