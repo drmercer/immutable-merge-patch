@@ -21,7 +21,7 @@ var deepEqual = require("deep-equal");
 //			generate (diff)
 
 function generate(before, after) {
-	var ordered = isOrdered(before);
+	var ordered = isOrdered(before) && isOrdered(after);
 	var diff = ordered ? new OrderedMap() : new Map();
 
 	return diff.withMutations(function (mutableDiff) {
