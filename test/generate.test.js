@@ -37,7 +37,7 @@ describe("generate", () => {
 		);
 	});
 
-	it("should properly ignore non-string keys", () => {
+	it("should properly ignore non-string keys in either Map", () => {
 		var a = Map().set(["an","array"], "value");
 		var b = Map();
 

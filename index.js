@@ -57,9 +57,7 @@ function generate(before, after) {
 
 		// Record any additions (the remaining entries in remainingAfter).
 		// (First make sure all the keys in remainingAfter are strings)
-		remainingAfter = remainingAfter.filter(function(__val, key) {
-			return typeof key === "string";
-		});
+		remainingAfter = remainingAfter.filter(keyIsAString);
 		mutableDiff.merge(remainingAfter);
 	});
 }
@@ -72,10 +70,15 @@ function deepEquals(a, b) {
 	}
 }
 
+function keyIsAString(__val, key) {
+	return typeof key === "string";
+}
+
 //======================================================================
 //			apply (patch)
 
 function apply(before, patch) {
+	patch = patch.filter(keyIsAString)
 	var keysToDelete = [];
 	return before.withMutations(function(mutable) {
 		patch.forEach(function(val, key) {

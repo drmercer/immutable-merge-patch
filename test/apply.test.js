@@ -116,6 +116,16 @@ describe("apply", () => {
 		assert.deepEqual(c, b);
 	});
 
+	it("should properly ignore non-string keys in the patch", () => {
+		var a = Map({
+			p: 1,
+		});
+		var p = Map().set(["this","is","an","array"], "value");
+
+		var c = imp.apply(a, p);
+		assert.deepEqual(c, a);
+	});
+
 	it("should properly recurse", () => {
 		var a = Map({
 			a: 1,
