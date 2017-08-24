@@ -43,4 +43,4 @@ var c = immutableMergePatch.apply(a, diff);
 # License
 `immutable-merge-patch` is licensed under the MIT License.
 
-### P.S.: It's also [![forthebadge](http://forthebadge.com/images/badges/gluten-free.svg)](http://forthebadge.com)
+### P.S. It's also [![forthebadge](http://forthebadge.com/images/badges/gluten-free.svg)](http://forthebadge.com). ;)
